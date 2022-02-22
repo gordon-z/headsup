@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02698688825F450EA36F63F8 /* Pods_headsup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336C53F31EBECD7946C50C99 /* Pods_headsup.framework */; };
+		4068B1438315BCDE11DF9AAA /* Pods_headsup_headsupUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F97627946B2B384F690551 /* Pods_headsup_headsupUITests.framework */; };
+		A651C925D0C4F35AB2A2B552 /* Pods_headsupTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DB8F83DA4973B7C870889A0 /* Pods_headsupTests.framework */; };
 		F87C5BA0279A887E00DF6D72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87C5B9F279A887E00DF6D72 /* AppDelegate.swift */; };
 		F87C5BA2279A887E00DF6D72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87C5BA1279A887E00DF6D72 /* SceneDelegate.swift */; };
 		F87C5BA4279A887E00DF6D72 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87C5BA3279A887E00DF6D72 /* ViewController.swift */; };
@@ -39,6 +42,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		25C4F1D3F6B92ABE0767C6F8 /* Pods-headsup.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-headsup.debug.xcconfig"; path = "Target Support Files/Pods-headsup/Pods-headsup.debug.xcconfig"; sourceTree = "<group>"; };
+		336C53F31EBECD7946C50C99 /* Pods_headsup.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_headsup.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F19A97484699E52C77F950B /* Pods-headsupTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-headsupTests.debug.xcconfig"; path = "Target Support Files/Pods-headsupTests/Pods-headsupTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4188C00CA8D6DD267B5D3830 /* Pods-headsup.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-headsup.release.xcconfig"; path = "Target Support Files/Pods-headsup/Pods-headsup.release.xcconfig"; sourceTree = "<group>"; };
+		6C73D27B155AEAA8C262F0BE /* Pods-headsupTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-headsupTests.release.xcconfig"; path = "Target Support Files/Pods-headsupTests/Pods-headsupTests.release.xcconfig"; sourceTree = "<group>"; };
+		6DB8F83DA4973B7C870889A0 /* Pods_headsupTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_headsupTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A235E699803BD324C7D12E3 /* Pods-headsup-headsupUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-headsup-headsupUITests.debug.xcconfig"; path = "Target Support Files/Pods-headsup-headsupUITests/Pods-headsup-headsupUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B3F97627946B2B384F690551 /* Pods_headsup_headsupUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_headsup_headsupUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB1A5E5D6EE0ADC678AE8BDD /* Pods-headsup-headsupUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-headsup-headsupUITests.release.xcconfig"; path = "Target Support Files/Pods-headsup-headsupUITests/Pods-headsup-headsupUITests.release.xcconfig"; sourceTree = "<group>"; };
 		F87C5B9C279A887E00DF6D72 /* headsup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = headsup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F87C5B9F279A887E00DF6D72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F87C5BA1279A887E00DF6D72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +74,7 @@
 				F87C5BD4279A8B0F00DF6D72 /* MapboxCoreNavigation in Frameworks */,
 				F87C5BD6279A8B0F00DF6D72 /* MapboxNavigation in Frameworks */,
 				F87C5BD1279A88C500DF6D72 /* MapboxMaps in Frameworks */,
+				02698688825F450EA36F63F8 /* Pods_headsup.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A651C925D0C4F35AB2A2B552 /* Pods_headsupTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,12 +90,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4068B1438315BCDE11DF9AAA /* Pods_headsup_headsupUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CA929D63E587A91CE7C3FD0F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				25C4F1D3F6B92ABE0767C6F8 /* Pods-headsup.debug.xcconfig */,
+				4188C00CA8D6DD267B5D3830 /* Pods-headsup.release.xcconfig */,
+				7A235E699803BD324C7D12E3 /* Pods-headsup-headsupUITests.debug.xcconfig */,
+				DB1A5E5D6EE0ADC678AE8BDD /* Pods-headsup-headsupUITests.release.xcconfig */,
+				3F19A97484699E52C77F950B /* Pods-headsupTests.debug.xcconfig */,
+				6C73D27B155AEAA8C262F0BE /* Pods-headsupTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		D1B37CE19F9FF117D1A4A6E9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				336C53F31EBECD7946C50C99 /* Pods_headsup.framework */,
+				B3F97627946B2B384F690551 /* Pods_headsup_headsupUITests.framework */,
+				6DB8F83DA4973B7C870889A0 /* Pods_headsupTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F87C5B93279A887E00DF6D72 = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +128,8 @@
 				F87C5BB5279A887F00DF6D72 /* headsupTests */,
 				F87C5BBF279A887F00DF6D72 /* headsupUITests */,
 				F87C5B9D279A887E00DF6D72 /* Products */,
+				CA929D63E587A91CE7C3FD0F /* Pods */,
+				D1B37CE19F9FF117D1A4A6E9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,9 +181,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F87C5BC6279A887F00DF6D72 /* Build configuration list for PBXNativeTarget "headsup" */;
 			buildPhases = (
+				51969B01E217F13EEAB316E2 /* [CP] Check Pods Manifest.lock */,
 				F87C5B98279A887E00DF6D72 /* Sources */,
 				F87C5B99279A887E00DF6D72 /* Frameworks */,
 				F87C5B9A279A887E00DF6D72 /* Resources */,
+				D00293EFF762B39C8A578FC6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -162,6 +205,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F87C5BC9279A887F00DF6D72 /* Build configuration list for PBXNativeTarget "headsupTests" */;
 			buildPhases = (
+				41B841D398AC01E5B57B4CD7 /* [CP] Check Pods Manifest.lock */,
 				F87C5BAE279A887F00DF6D72 /* Sources */,
 				F87C5BAF279A887F00DF6D72 /* Frameworks */,
 				F87C5BB0279A887F00DF6D72 /* Resources */,
@@ -180,9 +224,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F87C5BCC279A887F00DF6D72 /* Build configuration list for PBXNativeTarget "headsupUITests" */;
 			buildPhases = (
+				CDE47EA8A912B8CE1A3794C7 /* [CP] Check Pods Manifest.lock */,
 				F87C5BB8279A887F00DF6D72 /* Sources */,
 				F87C5BB9279A887F00DF6D72 /* Frameworks */,
 				F87C5BBA279A887F00DF6D72 /* Resources */,
+				FEBCB78E010D438C5E7CB850 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -227,8 +273,8 @@
 			);
 			mainGroup = F87C5B93279A887E00DF6D72;
 			packageReferences = (
-				F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
-				F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */,
+				F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios.git" */,
+				F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios.git" */,
 			);
 			productRefGroup = F87C5B9D279A887E00DF6D72 /* Products */;
 			projectDirPath = "";
@@ -267,6 +313,109 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		41B841D398AC01E5B57B4CD7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-headsupTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		51969B01E217F13EEAB316E2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-headsup-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CDE47EA8A912B8CE1A3794C7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-headsup-headsupUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D00293EFF762B39C8A578FC6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-headsup/Pods-headsup-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-headsup/Pods-headsup-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-headsup/Pods-headsup-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FEBCB78E010D438C5E7CB850 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-headsup-headsupUITests/Pods-headsup-headsupUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-headsup-headsupUITests/Pods-headsup-headsupUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-headsup-headsupUITests/Pods-headsup-headsupUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F87C5B98279A887E00DF6D72 /* Sources */ = {
@@ -449,6 +598,7 @@
 		};
 		F87C5BC7279A887F00DF6D72 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 25C4F1D3F6B92ABE0767C6F8 /* Pods-headsup.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -478,6 +628,7 @@
 		};
 		F87C5BC8279A887F00DF6D72 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4188C00CA8D6DD267B5D3830 /* Pods-headsup.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -507,6 +658,7 @@
 		};
 		F87C5BCA279A887F00DF6D72 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F19A97484699E52C77F950B /* Pods-headsupTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -527,6 +679,7 @@
 		};
 		F87C5BCB279A887F00DF6D72 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C73D27B155AEAA8C262F0BE /* Pods-headsupTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -547,6 +700,7 @@
 		};
 		F87C5BCD279A887F00DF6D72 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7A235E699803BD324C7D12E3 /* Pods-headsup-headsupUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -565,6 +719,7 @@
 		};
 		F87C5BCE279A887F00DF6D72 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB1A5E5D6EE0ADC678AE8BDD /* Pods-headsup-headsupUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -623,7 +778,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
+		F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
 			requirement = {
@@ -631,7 +786,7 @@
 				version = 10.2.0;
 			};
 		};
-		F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */ = {
+		F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mapbox/mapbox-navigation-ios.git";
 			requirement = {
@@ -644,17 +799,17 @@
 /* Begin XCSwiftPackageProductDependency section */
 		F87C5BD0279A88C500DF6D72 /* MapboxMaps */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
+			package = F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios.git" */;
 			productName = MapboxMaps;
 		};
 		F87C5BD3279A8B0F00DF6D72 /* MapboxCoreNavigation */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */;
+			package = F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios.git" */;
 			productName = MapboxCoreNavigation;
 		};
 		F87C5BD5279A8B0F00DF6D72 /* MapboxNavigation */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */;
+			package = F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios.git" */;
 			productName = MapboxNavigation;
 		};
 /* End XCSwiftPackageProductDependency section */

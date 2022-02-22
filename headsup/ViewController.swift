@@ -4,6 +4,10 @@ import MapboxCoreNavigation
 import MapboxNavigation
 import MapboxDirections
 import Turf
+
+import UIKit
+import MQTTClient
+
 // #-end-code-snippet: navigation dependencies-swift
 class ViewController: UIViewController {
     // #-code-snippet: navigation vc-variables-swift
@@ -101,8 +105,8 @@ class ViewController: UIViewController {
         let origin = Waypoint(coordinate: origin, coordinateAccuracy: -1, name: "Start")
         let destination = Waypoint(coordinate: destination, coordinateAccuracy: -1, name: "Finish")
 
-        // Specify that the route is intended for automobiles avoiding traffic
-        let routeOptions = NavigationRouteOptions(waypoints: [origin, destination], profileIdentifier: .automobileAvoidingTraffic)
+        // Specify that the route is intended for cyclists avoiding traffic
+        let routeOptions = NavigationRouteOptions(waypoints: [origin, destination], profileIdentifier: .cycling)
 
         // Generate the route object and draw it on the map
         Directions.shared.calculate(routeOptions) { [weak self] (session, result) in
