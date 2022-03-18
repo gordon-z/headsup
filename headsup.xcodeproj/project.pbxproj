@@ -22,6 +22,8 @@
 		F87C5BD1279A88C500DF6D72 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = F87C5BD0279A88C500DF6D72 /* MapboxMaps */; };
 		F87C5BD4279A8B0F00DF6D72 /* MapboxCoreNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F87C5BD3279A8B0F00DF6D72 /* MapboxCoreNavigation */; };
 		F87C5BD6279A8B0F00DF6D72 /* MapboxNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F87C5BD5279A8B0F00DF6D72 /* MapboxNavigation */; };
+		F8B82D7227E3E80400BF24AC /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = F8B82D7127E3E80400BF24AC /* Numerics */; };
+		F8B82D7427E3E80400BF24AC /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = F8B82D7327E3E80400BF24AC /* RealModule */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,8 +75,10 @@
 			files = (
 				F87C5BD4279A8B0F00DF6D72 /* MapboxCoreNavigation in Frameworks */,
 				F87C5BD6279A8B0F00DF6D72 /* MapboxNavigation in Frameworks */,
+				F8B82D7427E3E80400BF24AC /* RealModule in Frameworks */,
 				F87C5BD1279A88C500DF6D72 /* MapboxMaps in Frameworks */,
 				02698688825F450EA36F63F8 /* Pods_headsup.framework in Frameworks */,
+				F8B82D7227E3E80400BF24AC /* Numerics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +111,6 @@
 				3F19A97484699E52C77F950B /* Pods-headsupTests.debug.xcconfig */,
 				6C73D27B155AEAA8C262F0BE /* Pods-headsupTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -196,6 +199,8 @@
 				F87C5BD0279A88C500DF6D72 /* MapboxMaps */,
 				F87C5BD3279A8B0F00DF6D72 /* MapboxCoreNavigation */,
 				F87C5BD5279A8B0F00DF6D72 /* MapboxNavigation */,
+				F8B82D7127E3E80400BF24AC /* Numerics */,
+				F8B82D7327E3E80400BF24AC /* RealModule */,
 			);
 			productName = headsup;
 			productReference = F87C5B9C279A887E00DF6D72 /* headsup.app */;
@@ -273,8 +278,9 @@
 			);
 			mainGroup = F87C5B93279A887E00DF6D72;
 			packageReferences = (
-				F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios.git" */,
-				F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios.git" */,
+				F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
+				F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */,
+				F8B82D7027E3E80400BF24AC /* XCRemoteSwiftPackageReference "swift-numerics" */,
 			);
 			productRefGroup = F87C5B9D279A887E00DF6D72 /* Products */;
 			projectDirPath = "";
@@ -778,7 +784,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios.git" */ = {
+		F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
 			requirement = {
@@ -786,7 +792,7 @@
 				version = 10.2.0;
 			};
 		};
-		F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios.git" */ = {
+		F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mapbox/mapbox-navigation-ios.git";
 			requirement = {
@@ -794,23 +800,41 @@
 				version = 2.2.0;
 			};
 		};
+		F8B82D7027E3E80400BF24AC /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-numerics.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		F87C5BD0279A88C500DF6D72 /* MapboxMaps */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios.git" */;
+			package = F87C5BCF279A88C500DF6D72 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
 			productName = MapboxMaps;
 		};
 		F87C5BD3279A8B0F00DF6D72 /* MapboxCoreNavigation */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios.git" */;
+			package = F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */;
 			productName = MapboxCoreNavigation;
 		};
 		F87C5BD5279A8B0F00DF6D72 /* MapboxNavigation */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios.git" */;
+			package = F87C5BD2279A8B0F00DF6D72 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */;
 			productName = MapboxNavigation;
+		};
+		F8B82D7127E3E80400BF24AC /* Numerics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8B82D7027E3E80400BF24AC /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = Numerics;
+		};
+		F8B82D7327E3E80400BF24AC /* RealModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8B82D7027E3E80400BF24AC /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = RealModule;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
