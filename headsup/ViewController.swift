@@ -14,24 +14,16 @@ var direction = [String]()
 var coords = [Double]()
 var currCoords = [Double]()
 
-var DistanceNextInstruction: Double = 30.0
+var DistanceNextInstruction: Double = 50.0
 var DistancePointReached: Double = 15.0
 var sentToBluetooth: Bool = false
+var directionBit: Int = 0
 
-let MQTT_HOST = "localhost" // or IP address e.g. "192.168.0.194"
+//let MQTT_HOST = "localhost" // or IP address e.g. "192.168.0.194"
+let MQTT_HOST = "test.mosquitto.org"
 let MQTT_PORT: UInt32 = 1883
 
-//struct Coords {
-//    let location: (latitude: Double, longitude: Double)
-//}
-//
-//extension Coords {
-//    init?(json: [String: Any]) {
-//        guard let name = json["name"] as? String,
-//              let latitude =
-//    }
-//}
-// #-end-code-snippet: navigation dependencies-swift
+
 class ViewController: UIViewController, CLLocationManagerDelegate {
     // #-code-snippet: navigation vc-variables-swift
     var navigationMapView: NavigationMapView!
@@ -43,13 +35,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     internal var mapView: MapView!
     var locationManager: CLLocationManager!
     var currentLocation: CLLocation?
-    
+    private var transport = MQTTCFSocketTransport()
+    fileprivate var session = MQTTSession()
+    fileprivate var completion: (()->())?
     
     // #-end-code-snippet: navigation vc-variables-swift
     // #-code-snippet: navigation view-did-load-swift
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.session?.delegate = self
+        self.transport.host = MQTT_HOST
+        self.transport.port = MQTT_PORT
+        session?.transport = transport
+        session?.connect()
+        
         navigationMapView = NavigationMapView(frame: view.bounds)
         navigationMapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(navigationMapView)
@@ -71,7 +71,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         coords.append(0)
         coords.append(0)
-        
+        direction.append("Ben")
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -84,15 +84,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
         
 
-//        print("navigation viewport: \(navigationViewportDataSource.))")
-//        navigationMapView.mapboxMap.onNext(.mapLoaded) { [self]_ in
-//                   self.locationUpdate(newLocation: navigationMapView.location.latestLocation!)
-//               }
+    }
+    
+    private func publishMessage(_ message: String, onTopic topic: String) {
+        session?.publishData(message.data(using: .utf8, allowLossyConversion: false), onTopic: topic, retain: false, qos: .exactlyOnce)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         defer { currentLocation = locations.last }
-//        print("Current Location: \(String(locations.debugDescription))")
         
         let string = String(locations.debugDescription)
         let stringSplit = string.components(separatedBy: "<")
@@ -122,10 +121,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         print("long waypoint: \(longWay)")
         print("Distance (m): \(Distance)")
         
+        
         if Distance < DistanceNextInstruction && sentToBluetooth == false {
 //            Ideally only happens once
             print("Send to bluetooth")
             sentToBluetooth = true
+            if (direction[0] == "right" || direction[0] == "Right"){
+                directionBit = 1
+            }
+            else {
+                directionBit = 0
+            }
+            publishMessage(String(directionBit), onTopic: "test/message")
         }
         if Distance < DistancePointReached {
 //            Make sure only happens once
@@ -136,7 +143,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-//    func navigationViewController(_ navigationViewController: NavigationViewController, willArriveAt waypoint: Waypoint, after remainingTimeInterval: TimeInterval, distance: CLLocationDistance)
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -242,10 +248,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
                 print("Distance: \(formattedDistance); ETA: \(formattedTravelTime!)")
                 
+                direction.removeAll()
+                
                 for step in leg.steps {
                     print("\(String(step.instructions))")
-                    let formattedDistance = distanceFormatter.string(fromMeters: step.distance)
-//                    print("— \(formattedDistance) —")
                     var stringSplit = String(step.instructions).components(separatedBy: " ")
                     for index in 0...(stringSplit.count-1){
                         if stringSplit[index] == "right" || stringSplit[index] == "left" || stringSplit[index] == "Right" || stringSplit[index] == "Left"{
@@ -260,35 +266,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 }
                 direction.removeFirst()
                 print(direction)
-                let routeProgress = RouteProgress(route: route, options: routeOptions)
-//                print("Route Progress: \(routeProgress.updateDistanceTraveled(with: ))")
-//                print("Route Progress: \(routeProgress.upcomingStep)")
+
 
 //                JSON Data of coordinates of waypoints along route
                 
                 guard let routeShape = route.shape, routeShape.coordinates.count > 0 else { return }
-                guard let mapView = strongSelf.navigationMapView.mapView else { return }
-                let sourceIdentifier = "routeStyle"
+                
                 // Convert the route’s coordinates into a linestring feature
                 let feature = Feature(geometry: .lineString(LineString(routeShape.coordinates)))
                 
                 var geoJSONSource = GeoJSONSource()
                 geoJSONSource.data = .feature(feature)
-                try? mapView.mapboxMap.style.addSource(geoJSONSource, id: sourceIdentifier)
-                // Customize the route line color and width
-                var lineLayer = LineLayer(id: "routeLayer")
-                lineLayer.source = sourceIdentifier
-                lineLayer.lineColor = .constant(.init(UIColor(red: 0.1897518039, green: 0.3010634184, blue: 0.7994888425, alpha: 1.0)))
-                lineLayer.lineWidth = .constant(3)
                 
-                // Add the style layer of the route line to the map
-                try? mapView.mapboxMap.style.addLayer(lineLayer)
-//                if let unwrapped = geoJSONSource.data{
-//                    print("Else statement: \(unwrapped)")
-//                }else{
-//                    print("Failed to unwrap")
-//                }
-//                print("Else statement: \(String(geoJSONSource.data.debugDescription))")
+
                 var string: String = String(geoJSONSource.data.debugDescription)
                 let ignore: Set<Character> = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "/", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", "]", "^", "_", "`", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "{", "|", "}", "~"]
                 string.removeAll(where: {ignore.contains($0)})
@@ -320,21 +310,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // If there's already a route line on the map, update its shape to the new route
         if mapView.mapboxMap.style.sourceExists(withId: sourceIdentifier) {
             try? mapView.mapboxMap.style.updateGeoJSONSource(withId: sourceIdentifier, geoJSON: .feature(feature))
-            print("If statement")
         } else {
             // Convert the route’s coordinates into a lineString Feature and add the source of the route line to the map
-//            var geoJSONSource = GeoJSONSource()
-//            geoJSONSource.data = .feature(feature)
-//            try? mapView.mapboxMap.style.addSource(geoJSONSource, id: sourceIdentifier)
-//            // Customize the route line color and width
-//            var lineLayer = LineLayer(id: "routeLayer")
-//            lineLayer.source = sourceIdentifier
-//            lineLayer.lineColor = .constant(.init(UIColor(red: 0.1897518039, green: 0.3010634184, blue: 0.7994888425, alpha: 1.0)))
-//            lineLayer.lineWidth = .constant(3)
-//
-//            // Add the style layer of the route line to the map
-//            try? mapView.mapboxMap.style.addLayer(lineLayer)
-//            print("Else statement: \(geoJSONSource.data)")
+            var geoJSONSource = GeoJSONSource()
+            geoJSONSource.data = .feature(feature)
+            try? mapView.mapboxMap.style.addSource(geoJSONSource, id: sourceIdentifier)
+            // Customize the route line color and width
+            var lineLayer = LineLayer(id: "routeLayer")
+            lineLayer.source = sourceIdentifier
+            lineLayer.lineColor = .constant(.init(UIColor(red: 0.1897518039, green: 0.3010634184, blue: 0.7994888425, alpha: 1.0)))
+            lineLayer.lineWidth = .constant(3)
+
+            // Add the style layer of the route line to the map
+            try? mapView.mapboxMap.style.addLayer(lineLayer)
         }
         
     }
@@ -342,9 +330,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     // #-end-code-snippet: navigation draw-route-swift
 }
 
-//extension ViewController: LocationPermissionsDelegate, LocationConsumer {
-//    func locationUpdate(newLocation: Location) {
-////        mapView.camera.fly(to: CameraOptions(center: newLocation.coordinate, zoom: 14.0), duration: 5.0)
-//        print("New Location: \(newLocation)")
-//    }
-//}
+extension ViewController: MQTTSessionManagerDelegate, MQTTSessionDelegate {
+
+    func newMessage(_ session: MQTTSession!, data: Data!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
+        if let msg = String(data: data, encoding: .utf8) {
+            print("topic \(topic!), msg \(msg)")
+        }
+    }
+
+    func messageDelivered(_ session: MQTTSession, msgID msgId: UInt16) {
+        print("delivered")
+        DispatchQueue.main.async {
+            self.completion?()
+        }
+    }
+}
