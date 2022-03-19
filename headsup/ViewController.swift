@@ -18,6 +18,9 @@ var DistanceNextInstruction: Double = 50.0
 var DistancePointReached: Double = 15.0
 var sentToBluetooth: Bool = false
 var directionBit: Int = 0
+var slopeDiff: Double = 1
+
+//var startedNavigation: Bool = false
 
 //let MQTT_HOST = "localhost" // or IP address e.g. "192.168.0.194"
 let MQTT_HOST = "test.mosquitto.org"
@@ -121,11 +124,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         print("long waypoint: \(longWay)")
         print("Distance (m): \(Distance)")
         
-        
+//        if startedNavigation == true{
+//            publishMessage("\(String(Int(Distance))) m", onTopic: "test/message")
+//        }
         if Distance < DistanceNextInstruction && sentToBluetooth == false {
 //            Ideally only happens once
             print("Send to bluetooth")
             sentToBluetooth = true
+//            startedNavigation = true
             if (direction[0] == "right" || direction[0] == "Right"){
                 directionBit = 1
             }
@@ -262,10 +268,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                             direction.append("")
                         }
                     }
+                    print("String Index: \(stringSplit)")
                     
                 }
-                direction.removeFirst()
-                print(direction)
+         
 
 
 //                JSON Data of coordinates of waypoints along route
@@ -277,8 +283,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 
                 var geoJSONSource = GeoJSONSource()
                 geoJSONSource.data = .feature(feature)
-                
-
+                 
                 var string: String = String(geoJSONSource.data.debugDescription)
                 let ignore: Set<Character> = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "/", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "[", "]", "^", "_", "`", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "{", "|", "}", "~"]
                 string.removeAll(where: {ignore.contains($0)})
@@ -289,9 +294,71 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     stringSplit.remove(at: index)
                 }
                 coords.removeAll()
+                
+                var origin = [Double]()
+                origin.append((stringSplit[0] as NSString).doubleValue)
+                origin.append((stringSplit[1] as NSString).doubleValue)
+                
                 for index in 2...(stringSplit.count-1){
                     coords.append((stringSplit[index] as NSString).doubleValue)
                 }
+                
+                print("original String Split: \(coords)")
+                
+                                
+                var baseslope: Double
+                var endslope: Double
+                var basepointLat: Double
+                var basepointLong: Double
+                var endpointLat: Double
+                var endpointLong: Double
+                var coordsRemove = [Int]()
+
+                
+                basepointLat = coords[0]
+                basepointLong = coords[1]
+                endpointLat = coords[2]
+                endpointLong = coords[3]
+                baseslope = (endpointLong - basepointLong)/(endpointLat - basepointLat)
+                for i in stride(from: 0, to: coords.count-3, by: 2) {
+//                    basepointLat = coords[i]
+//                    basepointLong = coords[i+1]
+                    endpointLat = coords[i+2]
+                    endpointLong = coords[i+3]
+                    
+                    endslope = (endpointLong - basepointLong)/(endpointLat - basepointLat)
+                    if (abs(endslope - baseslope) > slopeDiff || i == 0) {
+                        basepointLat = coords[i]
+                        basepointLong = coords[i+1]
+                        baseslope = (endpointLong - basepointLong)/(endpointLat - basepointLat)
+                    }
+                    else {
+//                        coords.remove(at: i)
+//                        coords.remove(at: i)
+                        coordsRemove.append(i)
+                        coordsRemove.append(i+1)
+                    }
+                    
+                    print("base slope: \(baseslope)")
+                }
+                
+                let originASlope = (coords[1] - origin[1])/(coords[0] - origin[0])
+                let ABSlope = (coords[3] - coords[1])/(coords[2] - coords[0])
+                // If there is a first turn between origin A B, remove
+                if (abs(ABSlope - originASlope) > slopeDiff){
+                    direction.removeFirst()
+                }
+                
+                print("Directions: \(direction)")
+                
+                for i in stride(from: coordsRemove.count-1, through: 0, by: -1) {
+                    coords.remove(at: coordsRemove[i])
+                }
+                
+                
+               
+
+                
                 print("String Split: \(coords)")
                 
             }
