@@ -30,5 +30,7 @@
 		<string>audio</string>
 		<string>location</string>
 	</array>
+	<key>NSContactsUsageDescription</key>
+	<string>Enable contacts to access emergency contacts</string>
 </dict>
 </plist>

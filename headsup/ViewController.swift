@@ -11,7 +11,8 @@ import UIKit
 import MQTTClient
 import Foundation
 import Numerics
-
+import ContactsUI
+import Contacts
 
 var direction = [String]()
 var coords = [Double]()
@@ -23,13 +24,14 @@ var sentToBluetooth: Bool = false
 var directionBit: Int = 0
 var slopeDiff: Double = 1
 
+var contactNumber: String = ""
 
 //let MQTT_HOST = "localhost" // or IP address e.g. "192.168.0.194"
 let MQTT_HOST = "test.mosquitto.org"
 let MQTT_PORT: UInt32 = 1883
 
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPickerDelegate {
     // #-code-snippet: navigation vc-variables-swift
     var navigationMapView: NavigationMapView!
     var navigationViewController: NavigationViewController!
@@ -90,6 +92,42 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             locationManager.startUpdatingLocation()
         }
         
+        let status = CNContactStore.authorizationStatus(for: .contacts)
+        if status == .denied || status == .restricted {
+            presentSettingsActionSheet()
+            return
+        }
+
+        // open it
+
+        let store = CNContactStore()
+        store.requestAccess(for: .contacts) { granted, error in
+            guard granted else {
+                DispatchQueue.main.async {
+                    self.presentSettingsActionSheet()
+                }
+                return
+            }
+
+            // get the contacts
+
+            var contacts = [CNContact]()
+            let request = CNContactFetchRequest(keysToFetch: [CNContactIdentifierKey as NSString, CNContactFormatter.descriptorForRequiredKeys(for: .fullName)])
+            do {
+                try store.enumerateContacts(with: request) { contact, stop in
+                    contacts.append(contact)
+                }
+            } catch {
+                print(error)
+            }
+
+            // do something with the contacts array (e.g. print the names)
+
+            let formatter = CNContactFormatter()
+            formatter.style = .fullName
+            
+            self.presentContactPicker()
+        }
 
     }
     
@@ -97,10 +135,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         session?.publishData(message.data(using: .utf8, allowLossyConversion: false), onTopic: topic, retain: false, qos: .exactlyOnce)
     }
     
+    func presentContactPicker() {
+        let contactPickerVC = CNContactPickerViewController()
+        contactPickerVC.delegate = self
+        present(contactPickerVC, animated: true)
+    }
+    
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        contactNumber = (contact.phoneNumbers.first?.value.stringValue)!
+        contactNumber = contactNumber.components(separatedBy: [" ", "-", "(", ")"]).joined()
+        print("Contact Number: \(contactNumber)")
+    }
+
+    
     private func subscribe() {
         self.session?.subscribe(toTopic: "test/message", at: .exactlyOnce) { error, result in
             print("subscribe result error \(String(describing: error)) result \(result!)")
         }
+    }
+    
+    func presentSettingsActionSheet() {
+        let alert = UIAlertController(title: "Permission to Contacts", message: "This app needs access to contacts in order to ...", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Go to Settings", style: .default) { _ in
+            let url = URL(string: UIApplication.openSettingsURLString)!
+            UIApplication.shared.open(url)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -417,23 +478,14 @@ extension ViewController: MQTTSessionManagerDelegate, MQTTSessionDelegate {
             // create the alert
             
             if msg == "fall"{
-//                let alert = UIAlertController(title: "Emergency Alert", message: "User has fallen.", preferredStyle: UIAlertController.Style.alert)
-//
-//                // add an action (button)
-//                alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
-//
-//                // show the alert
-//                self.present(alert, animated: true, completion: nil)
-                
-
-                if let phoneCallURL = URL(string: "tel://\("6474479334")") {
+               
+                if let phoneCallURL = URL(string: "tel://\(contactNumber)") {
 
                     let application:UIApplication = UIApplication.shared
                     if (application.canOpenURL(phoneCallURL)) {
                         application.open(phoneCallURL, options: [:], completionHandler: nil)
                     }
                 }
-                
             }
             
         }
