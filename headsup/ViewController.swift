@@ -1,3 +1,6 @@
+// mosquitto_sub -t "test/message" -h test.mosquitto.org
+// mosquitto_pub -h test.mosquitto.org -t "test/message" -m "fall"
+
 // #-code-snippet: navigation dependencies-swift
 import MapboxMaps
 import MapboxCoreNavigation
@@ -20,7 +23,6 @@ var sentToBluetooth: Bool = false
 var directionBit: Int = 0
 var slopeDiff: Double = 1
 
-//var startedNavigation: Bool = false
 
 //let MQTT_HOST = "localhost" // or IP address e.g. "192.168.0.194"
 let MQTT_HOST = "test.mosquitto.org"
@@ -52,6 +54,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         self.transport.port = MQTT_PORT
         session?.transport = transport
         session?.connect()
+//        subscribe()
+        
         
         navigationMapView = NavigationMapView(frame: view.bounds)
         navigationMapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -93,6 +97,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         session?.publishData(message.data(using: .utf8, allowLossyConversion: false), onTopic: topic, retain: false, qos: .exactlyOnce)
     }
     
+    private func subscribe() {
+        self.session?.subscribe(toTopic: "test/message", at: .exactlyOnce) { error, result in
+            print("subscribe result error \(String(describing: error)) result \(result!)")
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         defer { currentLocation = locations.last }
         
@@ -124,9 +134,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         print("long waypoint: \(longWay)")
         print("Distance (m): \(Distance)")
         
-//        if startedNavigation == true{
-//            publishMessage("\(String(Int(Distance))) m", onTopic: "test/message")
-//        }
+
         if Distance < DistanceNextInstruction && sentToBluetooth == false {
 //            Ideally only happens once
             print("Send to bluetooth")
@@ -147,6 +155,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             direction.removeFirst()
             sentToBluetooth = false
         }
+        
     }
     
     
@@ -361,8 +370,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 
                 print("String Split: \(coords)")
                 
+                
             }
         }
+        subscribe()
     }
 
     // #-end-code-snippet: navigation calculate-route-swift
@@ -400,8 +411,31 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 extension ViewController: MQTTSessionManagerDelegate, MQTTSessionDelegate {
 
     func newMessage(_ session: MQTTSession!, data: Data!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
+        
         if let msg = String(data: data, encoding: .utf8) {
             print("topic \(topic!), msg \(msg)")
+            // create the alert
+            
+            if msg == "fall"{
+//                let alert = UIAlertController(title: "Emergency Alert", message: "User has fallen.", preferredStyle: UIAlertController.Style.alert)
+//
+//                // add an action (button)
+//                alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
+//
+//                // show the alert
+//                self.present(alert, animated: true, completion: nil)
+                
+
+                if let phoneCallURL = URL(string: "tel://\("6474479334")") {
+
+                    let application:UIApplication = UIApplication.shared
+                    if (application.canOpenURL(phoneCallURL)) {
+                        application.open(phoneCallURL, options: [:], completionHandler: nil)
+                    }
+                }
+                
+            }
+            
         }
     }
 
