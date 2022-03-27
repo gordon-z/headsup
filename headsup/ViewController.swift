@@ -13,6 +13,7 @@ import Foundation
 import Numerics
 import ContactsUI
 import Contacts
+import CoreBluetooth
 
 var direction = [String]()
 var coords = [Double]()
@@ -27,11 +28,13 @@ var slopeDiff: Double = 1
 var contactNumber: String = ""
 
 //let MQTT_HOST = "localhost" // or IP address e.g. "192.168.0.194"
-let MQTT_HOST = "test.mosquitto.org"
+let MQTT_HOST = "BensMac.local"
 let MQTT_PORT: UInt32 = 1883
 
+var connected: Bool = false//Original connection state
 
 class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPickerDelegate {
+    
     // #-code-snippet: navigation vc-variables-swift
     var navigationMapView: NavigationMapView!
     var navigationViewController: NavigationViewController!
@@ -42,20 +45,27 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
     internal var mapView: MapView!
     var locationManager: CLLocationManager!
     var currentLocation: CLLocation?
-    private var transport = MQTTCFSocketTransport()
-    fileprivate var session = MQTTSession()
+//    private var transport = MQTTCFSocketTransport()
+//    fileprivate var session = MQTTSession()
     fileprivate var completion: (()->())?
+    
+    var centralManager: CBCentralManager!
+    
+    private var bluefruitPeripheral: CBPeripheral!
+    
+    private var txCharacteristic: CBCharacteristic!
+    private var rxCharacteristic: CBCharacteristic!
     
     // #-end-code-snippet: navigation vc-variables-swift
     // #-code-snippet: navigation view-did-load-swift
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.session?.delegate = self
-        self.transport.host = MQTT_HOST
-        self.transport.port = MQTT_PORT
-        session?.transport = transport
-        session?.connect()
+//        self.session?.delegate = self
+//        self.transport.host = MQTT_HOST
+//        self.transport.port = MQTT_PORT
+//        session?.transport = transport
+//        session?.connect()
 //        subscribe()
         
         
@@ -128,12 +138,152 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
             
             self.presentContactPicker()
         }
-
+        centralManager = CBCentralManager(delegate: self, queue: nil)
     }
     
-    private func publishMessage(_ message: String, onTopic topic: String) {
-        session?.publishData(message.data(using: .utf8, allowLossyConversion: false), onTopic: topic, retain: false, qos: .exactlyOnce)
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
+//        if (connected==false) {
+//            bluefruitPeripheral = peripheral
+//            //print("False")
+//            peripheral.delegate = self
+//            if (peripheral.identifier.debugDescription == "C3B07651-1EB2-CBC0-C770-2381A49C19CE") {
+//                print("Data: \(advertisementData.values)")
+//                centralManager?.connect(peripheral, options: nil)
+//                connected=true
+//            }
+//        }
+        
+        bluefruitPeripheral = peripheral
+        bluefruitPeripheral.delegate = self
+
+        //print("Peripheral Discovered: \(peripheral)")
+        //print("Peripheral name: \(peripheral.name)")
+        //print ("Advertisement Data : \(advertisementData)")
+        
+        centralManager?.connect(bluefruitPeripheral!, options: nil)
+
+        //print("Peripheral Discovered: \(peripheral)")
+//        if let peripheralNameUnwrapped=peripheral.name {
+//            /*if (peripheralNameUnwrapped == "Raspberry Pi") {
+//                centralManager?.connect(bluefruitPeripheral!, options: nil)
+//            }*/
+//            //print(peripheral.identifier.debugDescription)
+//            if (connected==false) {
+//                if (peripheral.identifier.debugDescription == "C3B07651-1EB2-CBC0-C770-2381A49C19CE") {
+//                    print("Data: \(advertisementData.values)")
+//                    centralManager?.connect(bluefruitPeripheral!, options: nil)
+//                    connected=true
+//                }
+//            }
+////            if (peripheral.state.rawValue=="connected") {
+////                print("Connected to pi")
+////            }
+//            //print("State: \(peripheral.state.rawValue) Identifier: \(peripheral.identifier.debugDescription)")
+//            //            print("Name: \(peripheral.name)")
+////            centralManager?.connect(bluefruitPeripheral!, options: nil)
+////            if (peripheralNameUnwrapped != "(null)") {
+////                //print("Peripheral name: \(peripheral.name)")
+////                //print("Peripheral name: \(peripheralNameUnwrapped)")
+////                //print ("Advertisement Data : \(advertisementData)")
+////                //centralManager?.connect(bluefruitPeripheral!, options: nil)
+////            }
+//        }
+//        centralManager?.connect(bluefruitPeripheral!, options: nil)
+//        else {
+//            //print("Nil peripheral value")
+//
+//        }
+        //print ("Advertisement Data : \(advertisementData)")
+        
+//        centralManager?.connect(bluefruitPeripheral!, options: nil)
     }
+        
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        print("*******************************************************")
+        print("Peripheral Name: \(peripheral.name)")
+        print("Peripheral Services: \(peripheral.services?.isEmpty)")
+
+        if ((error) != nil) {
+            print("Error discovering services: \(error!.localizedDescription)")
+            return
+        }
+        guard let services = peripheral.services else {
+            return
+        }
+        //We need to discover the all characteristic
+        for service in services {
+            peripheral.discoverCharacteristics(nil, for: service)
+        }
+        print("Discovered Services: \(services)")
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+           
+        guard let characteristics = service.characteristics
+        else {
+            return
+        }
+
+        print("Found \(characteristics.count) characteristics.")
+
+        for characteristic in characteristics {
+
+            if characteristic.uuid.isEqual(CBUUIDs.BLE_Characteristic_uuid_Rx)  {
+
+                rxCharacteristic = characteristic
+
+                peripheral.setNotifyValue(true, for: rxCharacteristic!)
+                peripheral.readValue(for: characteristic)
+
+                print("RX Characteristic: \(rxCharacteristic.uuid)")
+            }
+
+            if characteristic.uuid.isEqual(CBUUIDs.BLE_Characteristic_uuid_Tx){
+
+                txCharacteristic = characteristic
+
+                print("TX Characteristic: \(txCharacteristic.uuid)")
+            }
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?){
+        var characteristicASCIIValue = NSString()
+
+        guard characteristic == rxCharacteristic,
+
+        let characteristicValue = characteristic.value,
+        let ASCIIstring = NSString(data: characteristicValue, encoding: String.Encoding.utf8.rawValue) else { return }
+
+        characteristicASCIIValue = ASCIIstring
+
+        print("Value Recieved: \((characteristicASCIIValue as String))")
+    }
+    
+    func writeOutgoingValue(data: String){
+        let valueString = (data as NSString).data(using: String.Encoding.utf8.rawValue)
+        if let bluefruitPeripheral = bluefruitPeripheral {
+            if let txCharacteristic = txCharacteristic {
+                bluefruitPeripheral.writeValue(valueString!, for: txCharacteristic, type: CBCharacteristicWriteType.withResponse)
+            }
+        }
+    }
+    
+//    func disconnectFromDevice () {
+//        if bluefruitPeripheral != nil {
+//            centralManager?.cancelPeripheralConnection(bluefruitPeripheral!)
+//        }
+//    }
+    
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+//        print("Connected to pi")
+        print("Connected to pi. Services: \(peripheral.services?.isEmpty)")
+        bluefruitPeripheral.discoverServices([CBUUIDs.BLEService_UUID])
+    }
+    
+//    private func publishMessage(_ message: String, onTopic topic: String) {
+//        session?.publishData(message.data(using: .utf8, allowLossyConversion: false), onTopic: topic, retain: false, qos: .exactlyOnce)
+//    }
     
     func presentContactPicker() {
         let contactPickerVC = CNContactPickerViewController()
@@ -144,15 +294,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         contactNumber = (contact.phoneNumbers.first?.value.stringValue)!
         contactNumber = contactNumber.components(separatedBy: [" ", "-", "(", ")"]).joined()
-        print("Contact Number: \(contactNumber)")
+        //print("Contact Number: \(contactNumber)")
     }
 
     
-    private func subscribe() {
-        self.session?.subscribe(toTopic: "test/message", at: .exactlyOnce) { error, result in
-            print("subscribe result error \(String(describing: error)) result \(result!)")
-        }
-    }
+//    private func subscribe() {
+//        self.session?.subscribe(toTopic: "test/message", at: .exactlyOnce) { error, result in
+//            print("subscribe result error \(String(describing: error)) result \(result!)")
+//        }
+//    }
     
     func presentSettingsActionSheet() {
         let alert = UIAlertController(title: "Permission to Contacts", message: "This app needs access to contacts in order to ...", preferredStyle: .actionSheet)
@@ -166,6 +316,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         defer { currentLocation = locations.last }
+        
+        print(bluefruitPeripheral.debugDescription)
+        
+//        guard bluefruitPeripheral.services != nil
+//        else {
+//            return
+//        }
+//        let currentServices = bluefruitPeripheral.services!.debugDescription ?? "Nothing"
+//        print(currentServices)
+//        print(currentServices.debugDescription)
+        //print(bluefruitPeripheral.description)
+//        guard print("Bluefruit: \(bluefruitPeripheral.services!)") else {
+//            throw Error
+//        }
+//        guard let services = bluefruitPeripheral.services else {
+//            return
+//        }
+//        print("Bluefruit: \(services)")
         
         let string = String(locations.debugDescription)
         let stringSplit = string.components(separatedBy: "<")
@@ -182,18 +350,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
         for index in 0...(stringSplit4.count-1){
             currCoords.append((stringSplit4[index] as NSString).doubleValue)
         }
-        print("currCoords: \(currCoords)")
+        //print("currCoords: \(currCoords)")
         
         let latCurr = currCoords[0]/(180/(Double.pi))
         let longCurr = currCoords[1]/(180/(Double.pi))
         let latWay = coords[0]/(180/(Double.pi))
         let longWay = coords[1]/(180/(Double.pi))
         let Distance = 1000.0*1.609344*(3963.0*acos((sin(latCurr)*sin(latWay)+cos(latCurr)*cos(latWay)*cos(longWay - longCurr))))
-        print("lat current: \(latCurr)")
-        print("long current: \(longCurr)")
-        print("lat waypoint: \(latWay)")
-        print("long waypoint: \(longWay)")
-        print("Distance (m): \(Distance)")
+//        print("lat current: \(latCurr)")
+//        print("long current: \(longCurr)")
+//        print("lat waypoint: \(latWay)")
+//        print("long waypoint: \(longWay)")
+//        print("Distance (m): \(Distance)")
         
 
         if Distance < DistanceNextInstruction && sentToBluetooth == false {
@@ -203,11 +371,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
 //            startedNavigation = true
             if (direction[0] == "right" || direction[0] == "Right"){
                 directionBit = 1
+                print("Direction == 1")
             }
             else {
                 directionBit = 0
+                print("Direction == 0")
             }
-            publishMessage(String(directionBit), onTopic: "test/message")
+//            writeOutgoingValue(data: String(directionBit))
+            writeOutgoingValue(data: String(directionBit))
+//            publishMessage(String(directionBit), onTopic: "test/message")
         }
         if Distance < DistancePointReached {
 //            Make sure only happens once
@@ -289,7 +461,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
         let routeOptions = NavigationRouteOptions(waypoints: [origin, destination], profileIdentifier: .cycling)
         
 //        include steps of route
-        print("routeOptions: \(routeOptions.includesSteps)")
+        //print("routeOptions: \(routeOptions.includesSteps)")
         routeOptions.includesSteps = true
         // Generate the route object and draw it on the map
         
@@ -313,7 +485,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                 
                 // Show destination waypoint on the map
                 strongSelf.navigationMapView.showWaypoints(on: route)
-                print("Route via \(leg):")
+                //print("Route via \(leg):")
 
                 let distanceFormatter = LengthFormatter()
                 let formattedDistance = distanceFormatter.string(fromMeters: route.distance)
@@ -322,12 +494,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                 travelTimeFormatter.unitsStyle = .short
                 let formattedTravelTime = travelTimeFormatter.string(from: route.expectedTravelTime)
 
-                print("Distance: \(formattedDistance); ETA: \(formattedTravelTime!)")
+                //print("Distance: \(formattedDistance); ETA: \(formattedTravelTime!)")
                 
                 direction.removeAll()
                 
                 for step in leg.steps {
-                    print("\(String(step.instructions))")
+                    //print("\(String(step.instructions))")
                     var stringSplit = String(step.instructions).components(separatedBy: " ")
                     for index in 0...(stringSplit.count-1){
                         if stringSplit[index] == "right" || stringSplit[index] == "left" || stringSplit[index] == "Right" || stringSplit[index] == "Left"{
@@ -338,7 +510,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                             direction.append("")
                         }
                     }
-                    print("String Index: \(stringSplit)")
+                    //print("String Index: \(stringSplit)")
                     
                 }
          
@@ -373,7 +545,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                     coords.append((stringSplit[index] as NSString).doubleValue)
                 }
                 
-                print("original String Split: \(coords)")
+                //print("original String Split: \(coords)")
                 
                                 
                 var baseslope: Double
@@ -409,7 +581,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                         coordsRemove.append(i+1)
                     }
                     
-                    print("base slope: \(baseslope)")
+                    //print("base slope: \(baseslope)")
                 }
                 
                 let originASlope = (coords[1] - origin[1])/(coords[0] - origin[0])
@@ -419,7 +591,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                     direction.removeFirst()
                 }
                 
-                print("Directions: \(direction)")
+                //print("Directions: \(direction)")
                 
                 for i in stride(from: coordsRemove.count-1, through: 0, by: -1) {
                     coords.remove(at: coordsRemove[i])
@@ -429,12 +601,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                
 
                 
-                print("String Split: \(coords)")
+                //print("String Split: \(coords)")
                 
                 
             }
         }
-        subscribe()
+//        subscribe()
     }
 
     // #-end-code-snippet: navigation calculate-route-swift
@@ -469,16 +641,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
     // #-end-code-snippet: navigation draw-route-swift
 }
 
-extension ViewController: MQTTSessionManagerDelegate, MQTTSessionDelegate {
+/*extension ViewController: MQTTSessionManagerDelegate, MQTTSessionDelegate {
 
     func newMessage(_ session: MQTTSession!, data: Data!, onTopic topic: String!, qos: MQTTQosLevel, retained: Bool, mid: UInt32) {
         
         if let msg = String(data: data, encoding: .utf8) {
-            print("topic \(topic!), msg \(msg)")
+            //print("topic \(topic!), msg \(msg)")
             // create the alert
             
             if msg == "fall"{
-               
+                /*let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)*/
+                
                 if let phoneCallURL = URL(string: "tel://\(contactNumber)") {
 
                     let application:UIApplication = UIApplication.shared
@@ -497,4 +672,71 @@ extension ViewController: MQTTSessionManagerDelegate, MQTTSessionDelegate {
             self.completion?()
         }
     }
+}*/
+
+extension ViewController: CBCentralManagerDelegate {
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+            case .poweredOff:
+                print("Is Powered Off.")
+            case .poweredOn:
+                print("Is Powered On.")
+                startScanning()
+            case .unsupported:
+                print("Is Unsupported.")
+            case .unauthorized:
+                print("Is Unauthorized.")
+            case .unknown:
+                print("Unknown")
+            case .resetting:
+                print("Resetting")
+            @unknown default:
+                print("Error")
+        }
+    }
+    
+    func startScanning() -> Void {
+        // Start Scanning
+        centralManager?.scanForPeripherals(withServices: [CBUUIDs.heartServiceUUID])
+//        centralManager.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey : false])
+    }
+}
+
+extension ViewController: CBPeripheralManagerDelegate {
+    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        switch peripheral.state {
+            case .poweredOn:
+                print("Peripheral Is Powered On.")
+            case .unsupported:
+                print("Peripheral Is Unsupported.")
+            case .unauthorized:
+                print("Peripheral Is Unauthorized.")
+            case .unknown:
+                print("Peripheral Unknown")
+            case .resetting:
+                print("Peripheral Resetting")
+            case .poweredOff:
+                print("Peripheral Is Powered Off.")
+            @unknown default:
+                print("Error")
+        }
+    }
+}
+
+extension ViewController: CBPeripheralDelegate {
+//    print(bluefruitPeripheral.debugDescriptionz)
+//    private var bluefruitPeripheral: CBPeripheral!
+//
+//    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
+//
+//        bluefruitPeripheral = peripheral
+//
+//        bluefruitPeripheral.delegate = self
+//
+//        print("Peripheral Discovered: \(peripheral)")
+//        print("Peripheral name: \(peripheral.name)")
+//        print ("Advertisement Data : \(advertisementData)")
+//
+//        centralManager?.stopScan()
+//    }
 }
