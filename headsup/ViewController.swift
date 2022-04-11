@@ -1,5 +1,5 @@
-// mosquitto_sub -t "test/message" -h test.mosquitto.org
-// mosquitto_pub -h test.mosquitto.org -t "test/message" -m "fall"
+// mosquitto_sub -t "test/headsup" -h test.mosquitto.org
+// mosquitto_pub -h test.mosquitto.org -t "test/headsup" -m "fall"
 
 // #-code-snippet: navigation dependencies-swift
 import MapboxMaps
@@ -149,7 +149,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
 
     
     private func subscribe() {
-        self.session?.subscribe(toTopic: "test/message", at: .exactlyOnce) { error, result in
+        self.session?.subscribe(toTopic: "test/headsup", at: .exactlyOnce) { error, result in
             print("subscribe result error \(String(describing: error)) result \(result!)")
         }
     }
@@ -207,7 +207,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
             else {
                 directionBit = 0
             }
-            publishMessage(String(directionBit), onTopic: "test/message")
+            publishMessage(String(directionBit), onTopic: "test/headsup")
         }
         if Distance < DistancePointReached {
 //            Make sure only happens once
