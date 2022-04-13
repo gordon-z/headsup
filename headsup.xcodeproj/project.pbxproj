@@ -23,7 +23,6 @@
 		F87C5BD1279A88C500DF6D72 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = F87C5BD0279A88C500DF6D72 /* MapboxMaps */; };
 		F87C5BD4279A8B0F00DF6D72 /* MapboxCoreNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F87C5BD3279A8B0F00DF6D72 /* MapboxCoreNavigation */; };
 		F87C5BD6279A8B0F00DF6D72 /* MapboxNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F87C5BD5279A8B0F00DF6D72 /* MapboxNavigation */; };
-		F8B80C0727F125EA007E03D6 /* CBUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B80C0627F125EA007E03D6 /* CBUUID.swift */; };
 		F8B82D7227E3E80400BF24AC /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = F8B82D7127E3E80400BF24AC /* Numerics */; };
 		F8B82D7427E3E80400BF24AC /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = F8B82D7327E3E80400BF24AC /* RealModule */; };
 /* End PBXBuildFile section */
@@ -69,7 +68,6 @@
 		F87C5BBC279A887F00DF6D72 /* headsupUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = headsupUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F87C5BC0279A887F00DF6D72 /* headsupUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = headsupUITests.swift; sourceTree = "<group>"; };
 		F87C5BC2279A887F00DF6D72 /* headsupUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = headsupUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		F8B80C0627F125EA007E03D6 /* CBUUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CBUUID.swift; path = "../../../../Library/Messages/Attachments/3c/12/DD429CDC-B55A-4F39-B7D9-9DCEE1CB31AE/CBUUID.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +153,6 @@
 			children = (
 				F87C5B9F279A887E00DF6D72 /* AppDelegate.swift */,
 				F87C5BA1279A887E00DF6D72 /* SceneDelegate.swift */,
-				F8B80C0627F125EA007E03D6 /* CBUUID.swift */,
 				F87C5BA3279A887E00DF6D72 /* ViewController.swift */,
 				F81C347828076A53008022ED /* CBUUID.swift */,
 				F87C5BA5279A887E00DF6D72 /* Main.storyboard */,
@@ -438,7 +435,6 @@
 				F87C5BA0279A887E00DF6D72 /* AppDelegate.swift in Sources */,
 				F87C5BA2279A887E00DF6D72 /* SceneDelegate.swift in Sources */,
 				F81C347928076A53008022ED /* CBUUID.swift in Sources */,
-				F8B80C0727F125EA007E03D6 /* CBUUID.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
