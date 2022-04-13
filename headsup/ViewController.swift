@@ -1,7 +1,8 @@
 // mosquitto_sub -t "test/headsup" -h test.mosquitto.org
 // mosquitto_pub -h test.mosquitto.org -t "test/headsup" -m "fall"
 
-// #-code-snippet: navigation dependencies-swift
+// Parts of this code were provided by Mapbox with the expectation that it will be used for commercial use at https://docs.mapbox.com/
+
 import MapboxMaps
 import MapboxCoreNavigation
 import MapboxNavigation
@@ -200,7 +201,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
 //            Ideally only happens once
             print("Send to bluetooth")
             sentToBluetooth = true
-//            startedNavigation = true
             if (direction[0] == "right" || direction[0] == "Right"){
                 directionBit = 1
             }
@@ -391,8 +391,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                 endpointLong = coords[3]
                 baseslope = (endpointLong - basepointLong)/(endpointLat - basepointLat)
                 for i in stride(from: 0, to: coords.count-3, by: 2) {
-//                    basepointLat = coords[i]
-//                    basepointLong = coords[i+1]
                     endpointLat = coords[i+2]
                     endpointLong = coords[i+3]
                     
@@ -403,8 +401,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                         baseslope = (endpointLong - basepointLong)/(endpointLat - basepointLat)
                     }
                     else {
-//                        coords.remove(at: i)
-//                        coords.remove(at: i)
                         coordsRemove.append(i)
                         coordsRemove.append(i+1)
                     }
@@ -424,11 +420,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CNContactPick
                 for i in stride(from: coordsRemove.count-1, through: 0, by: -1) {
                     coords.remove(at: coordsRemove[i])
                 }
-                
-                
-               
-
-                
                 print("String Split: \(coords)")
                 
                 
