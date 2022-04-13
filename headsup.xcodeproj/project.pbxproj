@@ -10,7 +10,7 @@
 		02698688825F450EA36F63F8 /* Pods_headsup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336C53F31EBECD7946C50C99 /* Pods_headsup.framework */; };
 		4068B1438315BCDE11DF9AAA /* Pods_headsup_headsupUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F97627946B2B384F690551 /* Pods_headsup_headsupUITests.framework */; };
 		A651C925D0C4F35AB2A2B552 /* Pods_headsupTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DB8F83DA4973B7C870889A0 /* Pods_headsupTests.framework */; };
-		F81C347928076A53008022ED /* CBUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81C347828076A53008022ED /* CBUUID.swift */; };
+		F81C347B28076E18008022ED /* CBUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81C347A28076E18008022ED /* CBUUID.swift */; };
 		F87C5BA0279A887E00DF6D72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87C5B9F279A887E00DF6D72 /* AppDelegate.swift */; };
 		F87C5BA2279A887E00DF6D72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87C5BA1279A887E00DF6D72 /* SceneDelegate.swift */; };
 		F87C5BA4279A887E00DF6D72 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87C5BA3279A887E00DF6D72 /* ViewController.swift */; };
@@ -54,7 +54,7 @@
 		7A235E699803BD324C7D12E3 /* Pods-headsup-headsupUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-headsup-headsupUITests.debug.xcconfig"; path = "Target Support Files/Pods-headsup-headsupUITests/Pods-headsup-headsupUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B3F97627946B2B384F690551 /* Pods_headsup_headsupUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_headsup_headsupUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB1A5E5D6EE0ADC678AE8BDD /* Pods-headsup-headsupUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-headsup-headsupUITests.release.xcconfig"; path = "Target Support Files/Pods-headsup-headsupUITests/Pods-headsup-headsupUITests.release.xcconfig"; sourceTree = "<group>"; };
-		F81C347828076A53008022ED /* CBUUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CBUUID.swift; path = "../../../../Library/Messages/Attachments/8b/11/6C333553-F112-444E-810E-D9FC6462328F/CBUUID.swift"; sourceTree = "<group>"; };
+		F81C347A28076E18008022ED /* CBUUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUID.swift; sourceTree = "<group>"; };
 		F87C5B9C279A887E00DF6D72 /* headsup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = headsup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F87C5B9F279A887E00DF6D72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F87C5BA1279A887E00DF6D72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -154,7 +154,7 @@
 				F87C5B9F279A887E00DF6D72 /* AppDelegate.swift */,
 				F87C5BA1279A887E00DF6D72 /* SceneDelegate.swift */,
 				F87C5BA3279A887E00DF6D72 /* ViewController.swift */,
-				F81C347828076A53008022ED /* CBUUID.swift */,
+				F81C347A28076E18008022ED /* CBUUID.swift */,
 				F87C5BA5279A887E00DF6D72 /* Main.storyboard */,
 				F87C5BA8279A887F00DF6D72 /* Assets.xcassets */,
 				F87C5BAA279A887F00DF6D72 /* LaunchScreen.storyboard */,
@@ -434,7 +434,7 @@
 				F87C5BA4279A887E00DF6D72 /* ViewController.swift in Sources */,
 				F87C5BA0279A887E00DF6D72 /* AppDelegate.swift in Sources */,
 				F87C5BA2279A887E00DF6D72 /* SceneDelegate.swift in Sources */,
-				F81C347928076A53008022ED /* CBUUID.swift in Sources */,
+				F81C347B28076E18008022ED /* CBUUID.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
