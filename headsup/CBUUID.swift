@@ -3,7 +3,7 @@
 //  headsup
 //
 //  Created by Benjamin Stephens on 2022-03-22.
-//  Parts of the code were given from Mapbox as well as Adafruit https://docs.mapbox.com/  https://learn.adafruit.com/build-a-bluetooth-app-using-swift-5?view=all
+
 
 import Foundation
 import CoreBluetooth

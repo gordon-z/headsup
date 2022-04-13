@@ -1,6 +1,9 @@
 // mosquitto_sub -t "test/message" -h test.mosquitto.org
 // mosquitto_pub -h test.mosquitto.org -t "test/message" -m "fall"
 // #-code-snippet: navigation dependencies-swift
+
+//  Parts of the code were given from Mapbox as well as Adafruit https://docs.mapbox.com/  https://learn.adafruit.com/build-a-bluetooth-app-using-swift-5?view=all
+
 import MapboxMaps
 import MapboxCoreNavigation
 import MapboxNavigation
