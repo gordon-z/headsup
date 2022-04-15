@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>MBXAccessToken</key>
-	<string>pk.eyJ1IjoiZ29yZG9nIiwiYSI6ImNreWw2dXo3azAyd3UydnJweHlzcms5aWMifQ.kUHOPop4GEmE1s7Z0G-m0A</string>
+	<string>[YOURTOKENHERE]</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>NSLocationWhenInUseUsageDescription</key>
